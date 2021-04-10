@@ -13,6 +13,7 @@
         "laravel/framework": "^8.12",
         "laravel/tinker": "^2.5",
         "laravel/ui": "^3.2",
+        "nicklaw5/twitch-api-php": "^4.2",
         "php-webdriver/webdriver": "^1.10",
         "spekulatius/phpscraper": "^0.4.7",
         "symfony/panther": "^1.0",

@@ -15,7 +15,29 @@ use GhostZero\Tmi\Events\Twitch\ResubEvent;
 use GhostZero\Tmi\Events\Twitch\SubGiftEvent;
 use GhostZero\Tmi\Events\Twitch\SubMysteryGiftEvent;
 
+var_dump($argv);
 $GLOBALS['streamer'] = $argv[1];
+function check(){
+    $url = 'https://api.twitch.tv/helix/streams/?user_login='.$GLOBALS['streamer'];
+    $fields = array('Authorization: Bearer 2xzskw949bee02hli7jc8tpwwxe256', 'Client-ID: gosbl0lt05vzj18la6v11lexhvpwlb');
+    $ch = curl_init();
+    //set the url, number of POST vars, POST data
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_HTTPGET, true);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, $fields);
+
+    //So that curl_exec returns the contents of the cURL; rather than echoing it
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+    //execute post
+    $result = curl_exec($ch);
+    $object = json_decode($result,true);
+    return empty($object['data']);
+}
+
+if(check())
+    die();
+
 $client = new Client(new ClientOptions([
     'options' => ['debug' => false],
     'connection' => [
@@ -69,6 +91,7 @@ function subbed($event, $type): void
     $result = curl_exec($ch);
     dump($result);
 }
+
 
 $client->on(SubEvent::class, function (SubEvent $event) {
     subbed($event,'SubEvent');
