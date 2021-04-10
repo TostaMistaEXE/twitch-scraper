@@ -10,9 +10,9 @@ class CreateSub extends Controller
     public function createsub(Request $request)
     {
         $request->validate([
-            'element_id'=>'required|unique:subs',
-            'element_text'=>'required',
-            'streamer'=>'required',
+            'type' => 'required',
+            'streamer' => 'required',
+            'plan' => 'required',
         ]);
 
         subs::create($request->all());
@@ -22,9 +22,9 @@ class CreateSub extends Controller
     public function createsubtest(Request $request)
     {
         $request->validate([
-            'element_id'=>'required|unique:subs',
-            'element_text'=>'required',
-            'streamer'=>'required',
+            'element_id' => 'required|unique:subs',
+            'element_text' => 'required',
+            'streamer' => 'required',
         ]);
 
         subs::create($request->all());
