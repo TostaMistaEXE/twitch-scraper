@@ -11,14 +11,14 @@ use GhostZero\Tmi\Events\Twitch\ResubEvent;
 use GhostZero\Tmi\Events\Twitch\SubGiftEvent;
 use GhostZero\Tmi\Events\Twitch\SubMysteryGiftEvent;
 $streamers = ['ludwig','xqcow','sodapoppin'];
-for ($i = 0; $i <= count($streamers); ++$i) {
+for ($i = 0; $i <= count($streamers)-1; ++$i) {
 
     $pid = pcntl_fork();
     if ($pid == -1) {
         die('could not fork');
     } else if ($pid) {
         // we are the parent
-        pcntl_wait($status); //Protect against Zombie children
+       // pcntl_wait($status); //Protect against Zombie children
     } else {
         var_dump($streamers[$i]);
         $GLOBALS['streamer'] = $streamers[$i];
