@@ -10,7 +10,7 @@ use GhostZero\Tmi\Events\Twitch\AnonSubMysteryGiftEvent;
 use GhostZero\Tmi\Events\Twitch\ResubEvent;
 use GhostZero\Tmi\Events\Twitch\SubGiftEvent;
 use GhostZero\Tmi\Events\Twitch\SubMysteryGiftEvent;
-$streamers = ['ludwig','xqcow','sodapoppin'];
+$streamers = ['ludwig','xqcow','sodapoppin','shroud','hasanabi','mizkif','forsen'];
 for ($i = 0; $i <= count($streamers)-1; ++$i) {
 
     $pid = pcntl_fork();
