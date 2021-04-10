@@ -11,7 +11,7 @@ use GhostZero\Tmi\Events\Twitch\ResubEvent;
 use GhostZero\Tmi\Events\Twitch\SubGiftEvent;
 use GhostZero\Tmi\Events\Twitch\SubMysteryGiftEvent;
 $streamers = ['ludwig','xqcow','sodapoppin'];
-for ($i = 1; $i <= 5; ++$i) {
+for ($i = 0; $i <= 3; ++$i) {
 
     $pid = pcntl_fork();
     if ($pid == -1) {
