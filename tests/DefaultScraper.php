@@ -15,7 +15,6 @@ use GhostZero\Tmi\Events\Twitch\ResubEvent;
 use GhostZero\Tmi\Events\Twitch\SubGiftEvent;
 use GhostZero\Tmi\Events\Twitch\SubMysteryGiftEvent;
 
-var_dump($argv);
 $GLOBALS['streamer'] = $argv[1];
 function check(){
     $url = 'https://api.twitch.tv/helix/streams/?user_login='.$GLOBALS['streamer'];

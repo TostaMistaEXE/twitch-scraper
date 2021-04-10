@@ -1,8 +1,14 @@
 <?php
 
 
-exec('php .\DefaultScraper.php sodapoppin > /dev/null 2>&1 &');
-exec('php .\DefaultScraper.php asmongold > /dev/null 2>&1 &');
-exec('php .\DefaultScraper.php ludwig > /dev/null 2>&1 &');
-exec('php .\DefaultScraper.php hasanabi > /dev/null 2>&1 &');
-exec('php .\DefaultScraper.php greekgodx > /dev/null 2>&1 &');
+$pid = pcntl_fork();
+if ($pid == -1) {
+     die('could not fork');
+} else if ($pid) {
+     // we are the parent
+     pcntl_wait($status); //Protect against Zombie children
+} else {
+    exec('php .\DefaultScraper.php sodapoppin');
+
+     // we are the child
+}
