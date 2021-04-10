@@ -15,7 +15,7 @@ use GhostZero\Tmi\Events\Twitch\ResubEvent;
 use GhostZero\Tmi\Events\Twitch\SubGiftEvent;
 use GhostZero\Tmi\Events\Twitch\SubMysteryGiftEvent;
 
-$GLOBALS['streamer'] = 'ludwig';
+$GLOBALS['streamer'] = $argv[1];
 $client = new Client(new ClientOptions([
     'options' => ['debug' => false],
     'connection' => [
