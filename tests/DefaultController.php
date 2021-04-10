@@ -87,6 +87,6 @@ $client->on(SubGiftEvent::class, function (SubGiftEvent $event) {
     gifted($event,'SubGiftEvent');
 });
 $client->on(SubMysteryGiftEvent::class, function (SubMysteryGiftEvent $event) {
-    gifted($event,'SubMysteryGiftEvent');
+    subbed($event,'SubMysteryGiftEvent');
 });
 $client->connect();
