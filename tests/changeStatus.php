@@ -2,7 +2,6 @@
 
 require_once(__DIR__.'/../vendor/autoload.php');
 
-shell_exec('pkill -f "run.php"');
 
 $url = 'http://localhost:8000/api/streamers/changeStatus';
 $fields = ['streamer' => $argv[1], 'run' => $argv[2]];
