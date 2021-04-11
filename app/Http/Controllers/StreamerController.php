@@ -31,6 +31,9 @@ class StreamerController extends Controller
         return $streamer->get();
     }
     public function create(Request $request){
-        return Streamer::create(['streamer'=>$request->streamer]);
+        Streamer::create(['streamer'=>$request->streamer]);
+        exec('php '.__DIR__ . '/../../../tests/killall.php');
+        exec('php '.__DIR__ . '/../../../tests/run.php');
+        return 1;
     }
 }
