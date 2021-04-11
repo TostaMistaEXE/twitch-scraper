@@ -20,6 +20,7 @@
         "weidner/goutte": "^2.1"
     },
     "require-dev": {
+        "barryvdh/laravel-ide-helper": "^2.10",
         "dbrekelmans/bdi": "^0.3.0",
         "facade/ignition": "^2.5",
         "fakerphp/faker": "^1.9.1",
