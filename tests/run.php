@@ -19,13 +19,13 @@ for ($i = 0; $i <= count($streamers)-1; ++$i) {
         die('could not fork');
     } else if ($pid) {
         // we are the parent
-	var_dump('11');	
+	var_dump('11');
 //die('main100%');
        // pcntl_wait($status); //Protect against Zombie children
         die('main, 100%?');
     } else {
         $GLOBALS['streamer'] = ($streamers[$i]->streamer);
-cli_set_process_title($GLOBALS['streamer'].'run.php');
+        cli_set_process_title($GLOBALS['streamer'].'run.php');
         echo($GLOBALS['streamer']."\n");
         exec('php changeStatus.php '.$GLOBALS['streamer'].' 1');
         function check()
