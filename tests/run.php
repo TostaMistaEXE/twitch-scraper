@@ -20,9 +20,11 @@ for ($i = 0; $i <= count($streamers)-1; ++$i) {
     } else if ($pid) {
         // we are the parent
        // pcntl_wait($status); //Protect against Zombie children
+        die('main, 100%?');
     } else {
         $GLOBALS['streamer'] = ($streamers[$i]->streamer);
         echo($GLOBALS['streamer']."\n");
+        exec('php changeStatus.php '.$GLOBALS['streamer'].' 1');
         function check()
         {
             $url = 'https://api.twitch.tv/helix/streams/?user_login=' . $GLOBALS['streamer'];
