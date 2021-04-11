@@ -21,7 +21,7 @@ for ($i = 0; $i <= count($streamers)-1; ++$i) {
         // we are the parent
        // pcntl_wait($status); //Protect against Zombie children
     } else {
-        $GLOBALS['streamer'] = ($streamers[0]->streamer);
+        $GLOBALS['streamer'] = ($streamers[$i]->streamer);
         function check()
         {
             $url = 'https://api.twitch.tv/helix/streams/?user_login=' . $GLOBALS['streamer'];
