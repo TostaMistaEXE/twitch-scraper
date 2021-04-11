@@ -2,7 +2,7 @@
 
 require_once(__DIR__.'/../vendor/autoload.php');
 
-shell_exec('sudo kill -9 `ps aux | grep run.php`');
+shell_exec('kill -9 `ps aux | grep run.php`');
 
 $url = 'http://localhost:8000/api/streamers/killAll';
 $ch = curl_init();
@@ -15,3 +15,6 @@ curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 //execute post
 $result = curl_exec($ch);
 dump(json_decode($result));
+
+$output = shell_exec('ps aux | grep run.php');
+var_dump($output);
