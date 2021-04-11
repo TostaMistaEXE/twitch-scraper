@@ -33,7 +33,7 @@ class StreamerController extends Controller
     public function create(Request $request){
         Streamer::create(['streamer'=>$request->streamer]);
         exec('php '.__DIR__ . '/../../../tests/killall.php');
-        exec('php '.__DIR__ . '/../../../tests/run.php');
+        include(__DIR__ . '/../../../tests/run.php');
         return 1;
     }
 }

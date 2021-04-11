@@ -1,5 +1,5 @@
 <?php
-return 1;
+
 require_once(__DIR__ . '/../vendor/autoload.php');
 
 use GhostZero\Tmi\Client;
