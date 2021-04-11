@@ -10,7 +10,7 @@ use GhostZero\Tmi\Events\Twitch\AnonSubMysteryGiftEvent;
 use GhostZero\Tmi\Events\Twitch\ResubEvent;
 use GhostZero\Tmi\Events\Twitch\SubGiftEvent;
 use GhostZero\Tmi\Events\Twitch\SubMysteryGiftEvent;
-$streamers = ['ludwig','xqcow','sodapoppin','shroud','hasanabi','mizkif','forsen','trainwreckstv'];
+include('getStreamers.php');
 
 for ($i = 0; $i <= count($streamers)-1; ++$i) {
 
@@ -21,8 +21,7 @@ for ($i = 0; $i <= count($streamers)-1; ++$i) {
         // we are the parent
        // pcntl_wait($status); //Protect against Zombie children
     } else {
-        var_dump($streamers[$i]);
-        $GLOBALS['streamer'] = $streamers[$i];
+        $GLOBALS['streamer'] = ($streamers[0]->streamer);
         function check()
         {
             $url = 'https://api.twitch.tv/helix/streams/?user_login=' . $GLOBALS['streamer'];
