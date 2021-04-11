@@ -24,4 +24,10 @@ class StreamerController extends Controller
         $streamer->update(['run'=>$request->run]);
         return $streamer->get();
     }
+    public function changeOnline(Request $request)
+    {
+        $streamer = Streamer::where('streamer', $request->streamer);
+        $streamer->update(['is_online'=>$request->is_online]);
+        return $streamer->get();
+    }
 }

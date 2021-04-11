@@ -2,12 +2,8 @@
 
 require_once(__DIR__.'/../vendor/autoload.php');
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 35b509c27df835f270e1e29c4d07d0c165acbc6a
-$url = 'http://localhost:8000/api/streamers/changeStatus';
-$fields = ['streamer' => $argv[1], 'run' => $argv[2]];
+$url = 'http://localhost:8000/api/streamers/changeOnline';
+$fields = ['streamer' => $argv[1], 'is_online' => $argv[2]];
 $fields_string = http_build_query($fields);
 $ch = curl_init();
 //set the url, number of POST vars, POST data
