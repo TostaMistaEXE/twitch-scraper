@@ -19,13 +19,19 @@ for ($i = 0; $i <= count($streamers)-1; ++$i) {
         die('could not fork');
     } else if ($pid) {
         // we are the parent
+<<<<<<< HEAD
+=======
 	var_dump('11');
 //die('main100%');
+>>>>>>> 35b509c27df835f270e1e29c4d07d0c165acbc6a
        // pcntl_wait($status); //Protect against Zombie children
-        die('main, 100%?');
     } else {
         $GLOBALS['streamer'] = ($streamers[$i]->streamer);
+<<<<<<< HEAD
+	cli_set_process_title($GLOBALS['streamer'].'run.php');
+=======
         cli_set_process_title($GLOBALS['streamer'].'run.php');
+>>>>>>> 35b509c27df835f270e1e29c4d07d0c165acbc6a
         echo($GLOBALS['streamer']."\n");
         exec('php changeStatus.php '.$GLOBALS['streamer'].' 1');
         function check()
@@ -47,8 +53,13 @@ for ($i = 0; $i <= count($streamers)-1; ++$i) {
             return empty($object['data']);
         }
 
-        if (check())
-            die();
+        if (check()){
+exec('php changeStatus.php '.$GLOBALS['streamer'].' 0');
+exec('php changeOnline.php '.$GLOBALS['streamer'].' 0');
+die();
+}
+
+exec('php changeOnline.php '.$GLOBALS['streamer'].' 1');
 
         $client = new Client(new ClientOptions([
             'options' => ['debug' => false],
