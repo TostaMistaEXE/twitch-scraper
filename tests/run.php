@@ -22,10 +22,12 @@ for ($i = 0; $i <= count($streamers)-1; ++$i) {
 	var_dump('11');	
 //die('main100%');
        // pcntl_wait($status); //Protect against Zombie children
+        die('main, 100%?');
     } else {
         $GLOBALS['streamer'] = ($streamers[$i]->streamer);
 cli_set_process_title($GLOBALS['streamer'].'run.php');
         echo($GLOBALS['streamer']."\n");
+        exec('php changeStatus.php '.$GLOBALS['streamer'].' 1');
         function check()
         {
             $url = 'https://api.twitch.tv/helix/streams/?user_login=' . $GLOBALS['streamer'];
