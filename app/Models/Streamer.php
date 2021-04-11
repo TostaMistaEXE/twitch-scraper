@@ -8,4 +8,5 @@ use Illuminate\Database\Eloquent\Model;
 class Streamer extends Model
 {
     use HasFactory;
+    protected $fillable = ['streamer'];
 }

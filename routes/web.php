@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Streamer;
 use App\Models\subs;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Route;
@@ -17,10 +18,12 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
 
-    $streamers = subs::select('streamer')->groupBy('streamer')->get();
+    $streamers = Streamer::get();
     //ultimas 24 horas
     return view('show_streamers', compact('streamers'));
 });
+
+
 
 Route::get('/{slug}', function ($slug) {
 

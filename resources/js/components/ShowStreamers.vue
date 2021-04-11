@@ -1,23 +1,37 @@
 <template>
     <div>
         <div
-            class="p-6 max-w-sm mx-auto bg-white rounded-xl shadow-md flex items-center space-x-4"
-        >
+            class="p-6 max-w-sm mx-auto bg-white rounded-xl shadow-md flex items-center space-x-4">
             <div>
                 <div
-                    class="text-xl font-medium text-black"
-                    v-for="streamer in streamers"
-                >
-                    <a :href="streamer.streamer"> {{ streamer.streamer }}</a>
+                    class="text-xl font-medium text-red-600"
+                    v-for="streamer in streamers">
+                    <a :href="streamer.streamer" v-bind:class="{'text-green-500': streamer.run }"> {{
+                        streamer.streamer
+                        }}</a>
                 </div>
                 <p class="text-gray-500"></p>
             </div>
+
         </div>
-        <line-chart
+        <div class="bg-gray-50 flex-auto">
+            {{ streamerName }}
+            <input v-model="streamerName"
+                   class="h-12 px-4 mb-2 text-lg text-gray-700 placeholder-gray-600 border rounded-lg focus:shadow-outline"
+                   type="text" placeholder="Large input"/>
+            <button v-on:click="insertStreamer"
+                    class="h-12 px-6 m-2 text-lg text-indigo-100 transition-colors duration-150 bg-indigo-700 rounded-lg focus:shadow-outline hover:bg-indigo-800">
+                Adicionar streamer
+            </button>
+        </div>
+
+
+        <!--<line-chart
             :chartData="datacollection"
             :chartOptions="chartOptions"
             label="Positve"
-        />
+        />--->
+
     </div>
 </template>
 
@@ -27,9 +41,6 @@ import LineChart from "./LineChart.vue";
 export default {
     components: {
         LineChart
-    },
-    props: {
-        streamers: { type: Array, default: null }
     },
     data() {
         return {
@@ -48,13 +59,18 @@ export default {
                     }
                 ]
             },
-            chartOptions: { responsive: true }
+            chartOptions: {responsive: true},
+            streamerName: '',
+            streamers: '',
         };
     },
     mounted() {
-        this.fillData();
+        this.getStreamers();
     },
     methods: {
+        getStreamers(){
+            axios.get('/api/streamers/getAll').then(response=>{this.streamers = response.data});
+        },
         fillData() {
             this.datacollection = {
                 labels: [this.getRandomInt(), this.getRandomInt()],
@@ -74,7 +90,16 @@ export default {
         },
         getRandomInt() {
             return Math.floor(Math.random() * (50 - 5 + 1)) + 5;
-        }
+        },
+        insertStreamer() {
+            axios.post('/api/streamers/insert', {streamer: this.streamerName})
+                .catch(error => {
+                    console.log(error.message);
+                }).then(response => {
+
+                this.getStreamers();
+            });
+        },
     }
 };
 </script>

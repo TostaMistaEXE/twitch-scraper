@@ -24,4 +24,5 @@ Route::post('/create/sub/test',[CreateSub::class,'createsubtest']);
 Route::get('/streamers/getAll',[\App\Http\Controllers\StreamerController::class,'getAll']);
 Route::post('/streamers/killAll',[\App\Http\Controllers\StreamerController::class,'killAll']);
 Route::post('/streamers/changeStatus',[\App\Http\Controllers\StreamerController::class,'changeStatus']);
-Route::post('/streamers/changeOnline',[\App\Http\Controllers\StreamerController::class,'changeOnline']);
+Route::post('/streamers/changeOnline',[\App\Http\Controllers\StreamerController::class,'changeOnline    ']);
+Route::post('/streamers/insert',[\App\Http\Controllers\StreamerController::class,'create']);
