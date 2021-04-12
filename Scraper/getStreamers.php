@@ -1,6 +1,6 @@
 <?php
 
-require_once(__DIR__.'/../vendor/autoload.php');
+require_once(__DIR__.'/vendor/autoload.php');
 
 $url = 'http://localhost:8000/api/streamers/getAll';
 $ch = curl_init();

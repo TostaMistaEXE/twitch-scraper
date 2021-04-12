@@ -1,6 +1,6 @@
 <?php
 
-require_once(__DIR__.'/../vendor/autoload.php');
+require_once(__DIR__.'/vendor/autoload.php');
 
 $url = 'http://localhost:8000/api/streamers/changeOnline';
 $fields = ['streamer' => $argv[1], 'is_online' => $argv[2]];
