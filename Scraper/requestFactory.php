@@ -34,20 +34,20 @@ class Request
             $this->request();
             return;
         }
-        if ($this->requestUrl == 'status') {
+        else if ($this->requestUrl == 'status') {
             $this->requestUrl = 'http://localhost:8000/api/streamers/changeStatus';
             $this->setFields(['streamer' => $this->requestStreamer, 'run' => $this->requestStatus]);
             $this->request();
             return;
         }
-        if ($this->requestUrl == 'sub') {
+        else if ($this->requestUrl == 'sub') {
             $this->requestUrl = 'http://localhost:8000/api/create/sub';
             $this->setFields();
             $this->request();
             dump($this->requestFields);
             return;
         }
-        if ($this->requestUrl == 'checkTwitchOnline') {
+        else if ($this->requestUrl == 'checkTwitchOnline') {
             $this->requestUrl =  'https://api.twitch.tv/helix/streams/?user_login=' . $this->requestStreamer;
             $this->requestType = 'get';
             $this->setFields(array('Authorization: Bearer gokyy7wxa9apriyjr2evaccv6h71qn', 'Client-ID: gosbl0lt05vzj18la6v11lexhvpwlb'));
@@ -55,13 +55,13 @@ class Request
 
             return $this->decode();
         }
-        if ($this->requestUrl == 'getStreamers') {
+        else if ($this->requestUrl == 'getStreamers') {
             $this->requestUrl =  'http://localhost:8000/api/streamers/getAll';
             $this->requestType = 'get';
             $this->request();
             return $this->decode();
         }
-        if ($this->requestUrl == null) {
+        else {
             $this->requestUrl = 'http://localhost:8000/api/streamers/changeStatus';
             $this->setFields(['streamer' => $this->requestStreamer, 'run' => $this->requestStatus]);
             $this->request();
@@ -125,4 +125,4 @@ class RequestFactory
         return new Request($streamer, $status, $url, $customFields);
     }
 }
-$changeStatus = RequestFactory::create(null, null, 'getStreamers');
+$changeStatus = RequestFactory::create('xqcow', '0', null);
