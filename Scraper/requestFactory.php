@@ -99,4 +99,4 @@ class RequestFactory
         return new Request($streamer, $status, $url);
     }
 }
-$changeStatus = RequestFactory::create('nmplol', null, 'checkTwitchOnline');
+$changeStatus = RequestFactory::create('xqcow', null, 'checkTwitchOnline');
