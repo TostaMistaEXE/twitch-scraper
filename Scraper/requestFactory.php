@@ -55,8 +55,10 @@ class Request
             $this->setFields(['streamer' => $this->requestStreamer, 'run' => $this->requestStatus]);
             $this->requestUrl = 'http://localhost:8000/api/streamers/changeOnline';
             $this->setFields(['streamer' => $this->requestStreamer, 'is_online' => $this->requestStatus]);
+          
             return;
         }
+        return;
     }
 
     public function setRequestType()
@@ -88,7 +90,7 @@ class Request
     }
     public function result()
     {
-        // dump($this->requestResult);
+        dump($this->requestResult);
         return $this->requestResult;
     }
 }
