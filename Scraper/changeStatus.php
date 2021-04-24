@@ -4,6 +4,7 @@ require_once(__DIR__.'/vendor/autoload.php');
 
 $url = 'http://localhost:8000/api/streamers/changeStatus';
 $fields = ['streamer' => $argv[1], 'run' => $argv[2]];
+dump($fields);
 $fields_string = http_build_query($fields);
 $ch = curl_init();
 //set the url, number of POST vars, POST data
@@ -17,3 +18,4 @@ curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 //execute post
 $result = curl_exec($ch);
 dump($result);
+
