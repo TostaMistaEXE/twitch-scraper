@@ -17,6 +17,7 @@ class Request
         $this->requestStreamer = $streamer;
         $this->requestStatus = $status;
         $this->requestUrl = $url;
+        $this->start();
     }
 
     public function start(){

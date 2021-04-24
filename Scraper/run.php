@@ -10,7 +10,7 @@ use GhostZero\Tmi\Events\Twitch\AnonSubMysteryGiftEvent;
 use GhostZero\Tmi\Events\Twitch\ResubEvent;
 use GhostZero\Tmi\Events\Twitch\SubGiftEvent;
 use GhostZero\Tmi\Events\Twitch\SubMysteryGiftEvent;
-
+use RequestFactory;
 include('getStreamers.php');
 
 for ($i = 0; $i <= count($streamers) - 1; ++$i) {
@@ -25,15 +25,15 @@ for ($i = 0; $i <= count($streamers) - 1; ++$i) {
         $GLOBALS['streamer'] = ($streamers[$i]->streamer);
         cli_set_process_title($GLOBALS['streamer'] . 'run.php');
         echo ($GLOBALS['streamer'] . "\n");
-        $request = new Request($GLOBALS['streamer'], '1', 'status');
-        $request = new Request($GLOBALS['streamer'], null, 'checkTwitchOnline');
+        $request = new RequestFactory($GLOBALS['streamer'], '1', 'status');
+        $request = new RequestFactory($GLOBALS['streamer'], null, 'checkTwitchOnline');
 
         if (empty($request)) {
-            $request = new Request($GLOBALS['streamer'], '0');
+            $request = new RequestFactory($GLOBALS['streamer'], '0');
             die();
         }
 
-        $request = new Request($GLOBALS['streamer'], '1', 'online');
+        $request = new RequestFactory($GLOBALS['streamer'], '1', 'online');
 
         $client = new Client(new ClientOptions([
             'options' => ['debug' => false],
