@@ -23,7 +23,6 @@ for ($i = 0; $i <= count($streamers) - 1; ++$i) {
     } else {
         $GLOBALS['streamer'] = ($streamers[$i]->streamer);
         cli_set_process_title($GLOBALS['streamer'] . 'run.php');
-        echo ($GLOBALS['streamer'] . "\n");
         $request = RequestFactory::create($GLOBALS['streamer'], '1', 'status');
         $request = RequestFactory::create($GLOBALS['streamer'], null, 'checkTwitchOnline');
         $data = $request->decode();
@@ -47,50 +46,24 @@ for ($i = 0; $i <= count($streamers) - 1; ++$i) {
         /**
          * @param SubGiftEvent $event
          */
-        function gifted($event, $type): void
+        function giftedRequest($event, $type): void
         {
-            $url = 'http://localhost:8000/api/create/sub';
+
             $fields = ['recipient' => $event->recipient, 'plan' => $event->plan->plan, 'type' => $type, 'gifter' => $event->user, 'streamer' => $GLOBALS['streamer']];
-            $fields_string = http_build_query($fields);
-            $ch = curl_init();
-            //set the url, number of POST vars, POST data
-            curl_setopt($ch, CURLOPT_URL, $url);
-            curl_setopt($ch, CURLOPT_POST, true);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $fields_string);
-
-            //So that curl_exec returns the contents of the cURL; rather than echoing it
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-
-            //execute post
-            $result = curl_exec($ch);
-            dump($result);
+            RequestFactory::create($GLOBALS['streamer'], null,'sub',$fields);
         }
 
         /**
          * @param SubEvent $event
          */
-        function subbed($event, $type): void
+        function subbedRequest($event, $type): void
         {
-            $url = 'http://localhost:8000/api/create/sub';
             $fields = ['recipient' => $event->user, 'plan' => $event->plan->plan, 'type' => $type, 'gifter' => NULL, 'streamer' => $GLOBALS['streamer']];
-            $fields_string = http_build_query($fields);
-            $ch = curl_init();
-            //set the url, number of POST vars, POST data
-            curl_setopt($ch, CURLOPT_URL, $url);
-            curl_setopt($ch, CURLOPT_POST, true);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $fields_string);
-
-            //So that curl_exec returns the contents of the cURL; rather than echoing it
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-
-            //execute post
-            $result = curl_exec($ch);
-            dump($result);
+            RequestFactory::create($GLOBALS['streamer'], null,'sub',$fields);
         }
 
-
         $client->on(SubEvent::class, function (SubEvent $event) {
-            subbed($event, 'SubEvent');
+            subbedRequest($event, 'SubEvent');
         });
         $client->on(AnonSubGiftEvent::class, function (AnonSubGiftEvent $event) {
             print_r($event);
@@ -100,13 +73,13 @@ for ($i = 0; $i <= count($streamers) - 1; ++$i) {
             print_r($event);
         });
         $client->on(ResubEvent::class, function (ResubEvent $event) {
-            subbed($event, 'ResubEvent');
+            subbedRequest($event, 'ResubEvent');
         });
         $client->on(SubGiftEvent::class, function (SubGiftEvent $event) {
-            gifted($event, 'SubGiftEvent');
+            giftedRequest($event, 'SubGiftEvent');
         });
         $client->on(SubMysteryGiftEvent::class, function (SubMysteryGiftEvent $event) {
-            subbed($event, 'SubMysteryGiftEvent');
+            subbedRequest($event, 'SubMysteryGiftEvent');
         });
         $client->connect();
     }
