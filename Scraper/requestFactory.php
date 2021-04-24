@@ -18,6 +18,7 @@ class Request
         $this->requestStatus = $status;
         $this->requestUrl = $url;
         $this->start();
+       
     }
 
     public function start(){
@@ -85,6 +86,4 @@ class RequestFactory
         return new Request($streamer, $status, $url);
     }
 }
-$changeStatus = RequestFactory::create('ludwig','0','changeOnline');
-
-$changeStatus->start();
+$changeStatus = RequestFactory::create('ludwig','0','online');
