@@ -4,7 +4,7 @@ require_once(__DIR__ . '/vendor/autoload.php');
 
 use GhostZero\Tmi\Client;
 use GhostZero\Tmi\ClientOptions;
-use Ghuse GhostZero\Tmi\Events\Twitczh\SubEvent;
+use GhostZero\Tmi\Events\Twitczh\SubEvent;
 use GhostZero\Tmi\Events\Twitch\AnonSubGiftEvent;
 use GhostZero\Tmi\Events\Twitch\AnonSubMysteryGiftEvent;
 use GhostZero\Tmi\Events\Twitch\ResubEvent;
