@@ -43,7 +43,7 @@ class Request
             $this->requestUrl = 'http://localhost:8000/api/create/sub';
             $this->setFields();
             $this->request();
-            echo 'sub';
+            dump('sub');
             return;
         }
         if ($this->requestUrl == 'checkTwitchOnline') {
