@@ -26,14 +26,15 @@ for ($i = 0; $i <= count($streamers) - 1; ++$i) {
         echo ($GLOBALS['streamer'] . "\n");
         $request = RequestFactory::create($GLOBALS['streamer'], '1', 'status');
         $request = RequestFactory::create($GLOBALS['streamer'], null, 'checkTwitchOnline');
-
         if (empty($request)) {
             $request = RequestFactory::create($GLOBALS['streamer'], '0');
             die();
         }
 
         $request = RequestFactory::create($GLOBALS['streamer'], '1', 'online');
-       'options' => ['debug' => false],
+
+        $client = new Client(new ClientOptions([
+            'options' => ['debug' => false],
             'connection' => [
                 'secure' => true,
                 'reconnect' => true,
