@@ -12,7 +12,7 @@ class Request
     private $requestType;
     private $ch;
 
-    public function __construct($streamer, $status = null, $url = null, $customFields = null)
+    public function __construct($streamer = null, $status = null, $url = null, $customFields = null)
     {
         $this->requestStreamer = $streamer;
         $this->requestStatus = $status;
@@ -120,9 +120,9 @@ class Request
 }
 class RequestFactory
 {
-    public static function create($streamer, $status = null, $url = null, $customFields = null)
+    public static function create($streamer = null, $status = null, $url = null, $customFields = null)
     {
-        return new Request($streamer, $status, $url, $customFields);
+        return new Request($streamer = null, $status, $url, $customFields);
     }
 }
-$changeStatus = RequestFactory::create('xqcow', null, 'getStreamers');
+$changeStatus = RequestFactory::create(null, null, 'getStreamers');
