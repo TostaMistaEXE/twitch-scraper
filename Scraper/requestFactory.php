@@ -114,7 +114,7 @@ class Request
     }
     public function result()
     {
-        dump($this->requestResult);
+        //dump($this->requestResult);
         return $this->requestResult;
     }
 }
