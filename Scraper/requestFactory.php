@@ -73,19 +73,29 @@ class Request
 
     public function setRequestType()
     {
-        $fields_string = http_build_query($this->requestFields);
         curl_setopt($this->ch, CURLOPT_URL, $this->requestUrl);
 
         if ($this->requestType == 'get') {
             curl_setopt($this->ch, CURLOPT_HTTPGET, true);
-            curl_setopt($this->ch, CURLOPT_HTTPHEADER, $this->requestFields);
+            $this->setHeader();
         } else {
             curl_setopt($this->ch, CURLOPT_POST, true);
-            curl_setopt($this->ch, CURLOPT_POSTFIELDS, $fields_string);
+            $this->setHeader();
         }
         curl_setopt($this->ch, CURLOPT_RETURNTRANSFER, true);
     }
+    public function setHeader()
+    {
+        if (!empty($this->requestFields)) {
+            $fields_string = http_build_query($this->requestFields);
 
+            if ($this->requestType == 'get') {
+                curl_setopt($this->ch, CURLOPT_HTTPHEADER, $fields_string);
+            } else {
+                curl_setopt($this->ch, CURLOPT_POSTFIELDS, $fields_string);
+            }
+        }
+    }
     public function request()
     {
         $this->ch = curl_init();
