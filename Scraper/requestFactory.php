@@ -25,26 +25,25 @@ class Request
         if ($fields != null)
             $this->requestFields = $fields;
 
-        if ($fields = null && $this->requestFields = null)
-            $fields = '';
-
-        $this->request();
     }
     public function start()
     {
         if ($this->requestUrl == 'online') {
             $this->requestUrl = 'http://localhost:8000/api/streamers/changeOnline';
             $this->setFields(['streamer' => $this->requestStreamer, 'is_online' => $this->requestStatus]);
+            $this->request();
             return;
         }
         if ($this->requestUrl == 'status') {
             $this->requestUrl = 'http://localhost:8000/api/streamers/changeStatus';
             $this->setFields(['streamer' => $this->requestStreamer, 'run' => $this->requestStatus]);
+            $this->request();
             return;
         }
         if ($this->requestUrl == 'sub') {
             $this->requestUrl = 'http://localhost:8000/api/create/sub';
             $this->setFields();
+            $this->request();
             dump($this->requestFields);
             return;
         }
@@ -52,6 +51,8 @@ class Request
             $this->requestUrl =  'https://api.twitch.tv/helix/streams/?user_login=' . $this->requestStreamer;
             $this->requestType = 'get';
             $this->setFields(array('Authorization: Bearer gokyy7wxa9apriyjr2evaccv6h71qn', 'Client-ID: gosbl0lt05vzj18la6v11lexhvpwlb'));
+            $this->request();
+
             return $this->decode();
         }
         if ($this->requestUrl == 'getStreamers') {
@@ -63,8 +64,11 @@ class Request
         if ($this->requestUrl == null) {
             $this->requestUrl = 'http://localhost:8000/api/streamers/changeStatus';
             $this->setFields(['streamer' => $this->requestStreamer, 'run' => $this->requestStatus]);
+            $this->request();
+
             $this->requestUrl = 'http://localhost:8000/api/streamers/changeOnline';
             $this->setFields(['streamer' => $this->requestStreamer, 'is_online' => $this->requestStatus]);
+            $this->request();
 
             return;
         }
