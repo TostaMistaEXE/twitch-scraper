@@ -94,7 +94,7 @@ class Request
             $fields_string = http_build_query($this->requestFields);
 
             if ($this->requestType == 'get') {
-                curl_setopt($this->ch, CURLOPT_HTTPHEADER, $fields_string);
+                curl_setopt($this->ch, CURLOPT_HTTPHEADER, $this->requestFields);
             } else {
                 curl_setopt($this->ch, CURLOPT_POSTFIELDS, $fields_string);
             }
