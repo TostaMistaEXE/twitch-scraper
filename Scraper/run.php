@@ -13,9 +13,8 @@ use GhostZero\Tmi\Events\Twitch\SubMysteryGiftEvent;
 include('requestFactory.php');
 $streamers = RequestFactory::create('xqcow', null, 'getStreamers');
 $streamers = $streamers->decode();
-dump($streamers);
 for ($i = 0; $i <= count($streamers) - 1; ++$i) {
-dd($streamers[$i]['streamer']);
+
     $pid = pcntl_fork();
     if ($pid == -1) {
         die('could not fork');
