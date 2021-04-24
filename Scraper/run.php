@@ -25,7 +25,7 @@ for ($i = 0; $i <= count($streamers) - 1; ++$i) {
         cli_set_process_title($GLOBALS['streamer'] . 'run.php');
         echo ($GLOBALS['streamer'] . "\n");
         $request = RequestFactory::create($GLOBALS['streamer'], '1', 'status');
-        $request = RequestFactory::create($GLOBALS['streamer'], null, 'checkTwitchOnlin        dd($request);e');
+        $request = RequestFactory::create($GLOBALS['streamer'], null, 'checkTwitchOnline');
 
         if (empty($request)) {
             $request = RequestFactory::create($GLOBALS['streamer'], '0');
