@@ -83,12 +83,13 @@ class Request
 
         return $this->result();
     }
-    public function decode(){
-        return empty(json_decode($this->requestResult, true));
+    public function decode()
+    {
+        return json_decode($this->requestResult, true);
     }
     public function result()
     {
-       // dump($this->requestResult);
+        dump($this->requestResult);
         return $this->requestResult;
     }
 }
@@ -99,4 +100,4 @@ class RequestFactory
         return new Request($streamer, $status, $url);
     }
 }
-$changeStatus = RequestFactory::create('xqcow', null, 'checkTwitchOnline');
+$changeStatus = RequestFactory::create('xqcow', '0');
