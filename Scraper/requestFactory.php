@@ -46,8 +46,8 @@ class Request
         }
         if ($this->requestUrl == 'checkTwitchOnline') {
             $this->requestUrl =  'https://api.twitch.tv/helix/streams/?user_login=' . $this->requestStreamer;
-            $this->setFields(array('Authorization: Bearer gokyy7wxa9apriyjr2evaccv6h71qn', 'Client-ID: gosbl0lt05vzj18la6v11lexhvpwlb'));
             $this->requestType = 'get';
+            $this->setFields(array('Authorization: Bearer gokyy7wxa9apriyjr2evaccv6h71qn', 'Client-ID: gosbl0lt05vzj18la6v11lexhvpwlb'));
             return $this->decode();
         }
         if ($this->requestUrl == null) {
