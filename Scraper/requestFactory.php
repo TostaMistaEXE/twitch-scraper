@@ -45,7 +45,7 @@ class Request
             $this->requestFields = array('Authorization: Bearer gokyy7wxa9apriyjr2evaccv6h71qn', 'Client-ID: gosbl0lt05vzj18la6v11lexhvpwlb');
             $this->requestType = 'get';
             $this->request();
-            return;
+            return $this->decode();
         }
         if ($this->requestUrl == null) {
             $this->requestUrl = 'http://localhost:8000/api/streamers/changeStatus';
@@ -80,9 +80,12 @@ class Request
 
         //execute post
         $this->requestResult = curl_exec($this->ch);
+
         return $this->result();
     }
-
+    public function decode(){
+        return empty(json_decode($this->requestResult, true));
+    }
     public function result()
     {
        // dump($this->requestResult);

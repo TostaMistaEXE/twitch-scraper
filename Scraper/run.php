@@ -4,7 +4,7 @@ require_once(__DIR__ . '/vendor/autoload.php');
 
 use GhostZero\Tmi\Client;
 use GhostZero\Tmi\ClientOptions;
-use GhostZero\Tmi\Events\Twitczh\SubEvent;
+use Ghuse GhostZero\Tmi\Events\Twitczh\SubEvent;
 use GhostZero\Tmi\Events\Twitch\AnonSubGiftEvent;
 use GhostZero\Tmi\Events\Twitch\AnonSubMysteryGiftEvent;
 use GhostZero\Tmi\Events\Twitch\ResubEvent;
@@ -25,17 +25,15 @@ for ($i = 0; $i <= count($streamers) - 1; ++$i) {
         cli_set_process_title($GLOBALS['streamer'] . 'run.php');
         echo ($GLOBALS['streamer'] . "\n");
         $request = RequestFactory::create($GLOBALS['streamer'], '1', 'status');
-        $request = RequestFactory::create($GLOBALS['streamer'], null, 'checkTwitchOnline');
-        dd($request);
+        $request = RequestFactory::create($GLOBALS['streamer'], null, 'checkTwitchOnlin        dd($request);e');
+
         if (empty($request)) {
             $request = RequestFactory::create($GLOBALS['streamer'], '0');
             die();
         }
 
         $request = RequestFactory::create($GLOBALS['streamer'], '1', 'online');
-
-        $client = new Client(new ClientOptions([
-            'options' => ['debug' => false],
+       'options' => ['debug' => false],
             'connection' => [
                 'secure' => true,
                 'reconnect' => true,
