@@ -122,7 +122,7 @@ class RequestFactory
 {
     public static function create($streamer = null, $status = null, $url = null, $customFields = null)
     {
-        return new Request($streamer = null, $status, $url, $customFields);
+        return new Request($streamer, $status, $url, $customFields);
     }
 }
 $changeStatus = RequestFactory::create(null, null, 'getStreamers');
