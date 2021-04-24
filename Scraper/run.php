@@ -26,7 +26,7 @@ for ($i = 0; $i <= count($streamers) - 1; ++$i) {
         echo ($GLOBALS['streamer'] . "\n");
         $request = RequestFactory::create($GLOBALS['streamer'], '1', 'status');
         $request = RequestFactory::create($GLOBALS['streamer'], null, 'checkTwitchOnline');
-
+        dd($request);
         if (empty($request)) {
             $request = RequestFactory::create($GLOBALS['streamer'], '0');
             die();
