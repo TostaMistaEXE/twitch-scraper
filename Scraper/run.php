@@ -14,7 +14,6 @@ include('requestFactory.php');
 $streamers = RequestFactory::create('xqcow', null, 'getStreamers');
 $streamers = $streamers->decode();
 for ($i = 0; $i <= count($streamers) - 1; ++$i) {
-
     $pid = pcntl_fork();
     if ($pid == -1) {
         die('could not fork');
@@ -22,7 +21,7 @@ for ($i = 0; $i <= count($streamers) - 1; ++$i) {
         // we are the parent
         // pcntl_wait($status); //Protect against Zombie children
     } else {
-        $GLOBALS['streamer'] = ($streamers[$i]->streamer);
+        $GLOBALS['streamer'] = ($streamers[$i]['streamer']);
         cli_set_process_title($GLOBALS['streamer'] . 'run.php');
 
         $request = RequestFactory::create($GLOBALS['streamer'], '1', 'status');
