@@ -10,8 +10,7 @@ use GhostZero\Tmi\Events\Twitch\AnonSubMysteryGiftEvent;
 use GhostZero\Tmi\Events\Twitch\ResubEvent;
 use GhostZero\Tmi\Events\Twitch\SubGiftEvent;
 use GhostZero\Tmi\Events\Twitch\SubMysteryGiftEvent;
-use RequestFactory;
-
+include('requestFactory.php');
 include('getStreamers.php');
 for ($i = 0; $i <= count($streamers) - 1; ++$i) {
 
