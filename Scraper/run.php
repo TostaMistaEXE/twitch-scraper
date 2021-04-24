@@ -11,7 +11,8 @@ use GhostZero\Tmi\Events\Twitch\ResubEvent;
 use GhostZero\Tmi\Events\Twitch\SubGiftEvent;
 use GhostZero\Tmi\Events\Twitch\SubMysteryGiftEvent;
 include('requestFactory.php');
-include('getStreamers.php');
+$streamers = RequestFactory::create('xqcow', null, 'getStreamers');
+
 for ($i = 0; $i <= count($streamers) - 1; ++$i) {
 
     $pid = pcntl_fork();

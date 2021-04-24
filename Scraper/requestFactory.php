@@ -24,6 +24,10 @@ class Request
     {
         if ($fields != null)
             $this->requestFields = $fields;
+
+        if ($fields = null && $this->requestFields = null)
+            $fields = '';
+
         $this->request();
     }
     public function start()
@@ -50,12 +54,18 @@ class Request
             $this->setFields(array('Authorization: Bearer gokyy7wxa9apriyjr2evaccv6h71qn', 'Client-ID: gosbl0lt05vzj18la6v11lexhvpwlb'));
             return $this->decode();
         }
+        if ($this->requestUrl == 'getStreamers') {
+            $this->requestUrl =  'http://localhost:8000/api/streamers/getAll';
+            $this->requestType = 'get';
+            $this->request();
+            return $this->decode();
+        }
         if ($this->requestUrl == null) {
             $this->requestUrl = 'http://localhost:8000/api/streamers/changeStatus';
             $this->setFields(['streamer' => $this->requestStreamer, 'run' => $this->requestStatus]);
             $this->requestUrl = 'http://localhost:8000/api/streamers/changeOnline';
             $this->setFields(['streamer' => $this->requestStreamer, 'is_online' => $this->requestStatus]);
-          
+
             return;
         }
         return;
@@ -101,4 +111,4 @@ class RequestFactory
         return new Request($streamer, $status, $url, $customFields);
     }
 }
-$changeStatus = RequestFactory::create('xqcow', '0');
+$changeStatus = RequestFactory::create('xqcow', null, 'getStreamers');
