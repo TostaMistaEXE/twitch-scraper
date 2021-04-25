@@ -19,8 +19,6 @@ class Request
 
     public function start()
     {
-        $this->setRequestType();
-        $this->setHeader();
         $this->request();
     }
 
@@ -52,6 +50,7 @@ class Request
     public function request()
     {
         $this->ch = curl_init();
+        $this->setHeader();
         $this->setRequestType();
         $this->requestResult = curl_exec($this->ch);
 
