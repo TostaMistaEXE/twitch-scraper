@@ -18,11 +18,14 @@ class Request
         $this->requestUrl = $request['uri'];
         $this->start();
     }
-    public function start(){
+
+    public function start()
+    {
         $this->setRequestType();
         $this->setHeader();
         $this->request();
     }
+
     public function setRequestType()
     {
         curl_setopt($this->ch, CURLOPT_URL, $this->requestUrl);
@@ -39,14 +42,13 @@ class Request
     }
     public function setHeader()
     {
-        if (!empty($this->requestFields)) {
-            $fields_string = http_build_query($this->requestFields);
 
-            if ($this->requestType == 'get') {
-                curl_setopt($this->ch, CURLOPT_HTTPHEADER, $this->requestFields);
-            } else {
-                curl_setopt($this->ch, CURLOPT_POSTFIELDS, $fields_string);
-            }
+        $fields_string = http_build_query($this->requestFields);
+
+        if ($this->requestType == 'get') {
+            curl_setopt($this->ch, CURLOPT_HTTPHEADER, $this->requestFields);
+        } else {
+            curl_setopt($this->ch, CURLOPT_POSTFIELDS, $fields_string);
         }
     }
     public function request()
