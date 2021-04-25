@@ -14,12 +14,15 @@ class Request
     {
         $this->requestType = $request['type'];
         $this->requestUrl = $request['uri'];
-        $this->start();
+        $this->requestFields = $request;
     }
 
     public function start()
     {
-        $this->request();
+        $this->ch = curl_init();
+        $this->setHeader();
+        $this->setRequestType();
+        return new RequestResult(curl_exec($this->ch));
     }
 
     public function setRequestType()
@@ -47,27 +50,31 @@ class Request
             curl_setopt($this->ch, CURLOPT_POSTFIELDS, $fields_string);
         }
     }
-    public function request()
-    {
-        $this->ch = curl_init();
-        $this->setHeader();
-        $this->setRequestType();
-        $this->requestResult = curl_exec($this->ch);
 
-        return $this->result();
+}
+
+class RequestResult{
+    public $result;
+    public function __construct($result)
+    {
+        $this->result = $result;
+        $this->result();
     }
+
     public function decode()
     {
-        return json_decode($this->requestResult, true);
+        return json_decode($this->result, true);
     }
+
     public function result()
     {
-        return $this->requestResult;
+        return $this->result;
     }
 }
+
 class RequestFactory
 {
-    public const API = ['online', 'getStreamers', 'status', 'sub'];
+    public const API = ['changeOnline', 'getStreamers', 'status', 'sub'];
     public $request;
     public $parameters;
 
@@ -89,11 +96,12 @@ class RequestFactory
     {
         //If the request is from the API add the base URL
         //Otherwise, doesn't change the URI
-        if (in_array($this->request, self::API))
-            $this->parameters['uri'] = 'http://localhost:8000/api/streamers' . $this->parameters['uri'];
+        if (in_array($this->parameters['uri'], self::API))
+            $this->parameters['uri'] = 'http://localhost:8000/api/streamers/' . $this->parameters['uri'];
     }
 }
-$changeStatus = (new RequestFactory)->create(['online' => ['type' => 'GET', 'uri' => '/changeOnline', 'streamer' => 'xqcow', 'is_online' => '1']]);
+$changeStatus = (new RequestFactory)->create(['online' => ['type' => 'POST', 'uri' => 'changeOnline', 'streamer' => 'xqcow', 'is_online' => '1']])->start();
+dump($changeStatus);
 //$this->requestUrl =  'https://api.twitch.tv/helix/streams/?user_login=' . $this->requestStreamer;
 //$this->requestType = 'get';
 //$this->setFields(array('Authorization: Bearer gokyy7wxa9apriyjr2evaccv6h71qn', 'Client-ID: gosbl0lt05vzj18la6v11lexhvpwlb'));
