@@ -81,6 +81,7 @@ class RequestFactory
 
     public function setParameters()
     {
+        //Gets the first value of the array
         $this->parameters = reset($this->request);
     }
 
