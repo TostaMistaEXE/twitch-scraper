@@ -13,7 +13,7 @@ class Request
     private $ch;
 
     public function __construct($request)
-    { 
+    {
         $this->requestType = $request['type'];
         $this->requestUrl = $request['uri'];
     }
@@ -75,13 +75,17 @@ class RequestFactory
         return new Request($this->parameters);
     }
 
-    public function setParameters(){
+    public function setParameters()
+    {
         $this->parameters = reset($this->request);
     }
 
     public function setUri()
     {
-        $this->parameters['uri'] = 'http://localhost:8000/api/streamers'.$this->parameters['uri'];
+        //If the request is from the API add the base URL
+        //Otherwise, doesn't change the URI
+        if (in_array($this->request, self::API))
+            $this->parameters['uri'] = 'http://localhost:8000/api/streamers' . $this->parameters['uri'];
     }
 }
 $changeStatus = (new RequestFactory)->create(['online' => ['type' => 'GET', 'uri' => '/changeOnline', 'streamer' => 'xqcow', 'is_online' => '1']]);
