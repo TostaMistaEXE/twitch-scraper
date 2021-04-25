@@ -7,8 +7,6 @@ class Request
     private $requestUrl;
     private $requestFields;
     private $requestResult;
-    private $requestStreamer;
-    private $requestStatus;
     private $requestType;
     private $ch;
 
