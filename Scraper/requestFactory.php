@@ -16,8 +16,13 @@ class Request
     {
         $this->requestType = $request['type'];
         $this->requestUrl = $request['uri'];
+        $this->start();
     }
-
+    public function start(){
+        $this->setRequestType();
+        $this->setHeader();
+        $this->request();
+    }
     public function setRequestType()
     {
         curl_setopt($this->ch, CURLOPT_URL, $this->requestUrl);
