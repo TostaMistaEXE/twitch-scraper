@@ -12,80 +12,24 @@ class Request
     private $requestType;
     private $ch;
 
-    public function __construct($streamer = null, $status = null, $url = null, $customFields = null)
-    {
-        $this->requestStreamer = $streamer;
-        $this->requestStatus = $status;
-        $this->requestFields = $customFields;
-        $this->requestUrl = $url;
-        $this->start();
-    }
-    public function setFields($fields = null)
-    {
-        if ($fields != null)
-            $this->requestFields = $fields;
-
-    }
-    public function start()
-    {
-        if ($this->requestUrl == 'online') {
-            $this->requestUrl = 'http://localhost:8000/api/streamers/changeOnline';
-            $this->setFields(['streamer' => $this->requestStreamer, 'is_online' => $this->requestStatus]);
-            $this->request();
-            return;
-        }
-        else if ($this->requestUrl == 'status') {
-            $this->requestUrl = 'http://localhost:8000/api/streamers/changeStatus';
-            $this->setFields(['streamer' => $this->requestStreamer, 'run' => $this->requestStatus]);
-            $this->request();
-            return;
-        }
-        else if ($this->requestUrl == 'sub') {
-            $this->requestUrl = 'http://localhost:8000/api/create/sub';
-            $this->setFields();
-            $this->request();
-            dump($this->requestFields);
-            return;
-        }
-        else if ($this->requestUrl == 'checkTwitchOnline') {
-            $this->requestUrl =  'https://api.twitch.tv/helix/streams/?user_login=' . $this->requestStreamer;
-            $this->requestType = 'get';
-            $this->setFields(array('Authorization: Bearer gokyy7wxa9apriyjr2evaccv6h71qn', 'Client-ID: gosbl0lt05vzj18la6v11lexhvpwlb'));
-            $this->request();
-
-            return $this->decode();
-        }
-        else if ($this->requestUrl == 'getStreamers') {
-            $this->requestUrl =  'http://localhost:8000/api/streamers/getAll';
-            $this->requestType = 'get';
-            $this->request();
-            return $this->decode();
-        }
-        else {
-            $this->requestUrl = 'http://localhost:8000/api/streamers/changeStatus';
-            $this->setFields(['streamer' => $this->requestStreamer, 'run' => $this->requestStatus]);
-            $this->request();
-
-            $this->requestUrl = 'http://localhost:8000/api/streamers/changeOnline';
-            $this->setFields(['streamer' => $this->requestStreamer, 'is_online' => $this->requestStatus]);
-            $this->request();
-
-            return;
-        }
-        return;
+    public function __construct($request)
+    { 
+        $this->requestType = $request['type'];
+        $this->requestUrl = $request['uri'];
     }
 
     public function setRequestType()
     {
         curl_setopt($this->ch, CURLOPT_URL, $this->requestUrl);
 
-        if ($this->requestType == 'get') {
+        if ($this->requestType == 'GET' || $this->requestType == 'get') {
             curl_setopt($this->ch, CURLOPT_HTTPGET, true);
             $this->setHeader();
         } else {
             curl_setopt($this->ch, CURLOPT_POST, true);
             $this->setHeader();
         }
+
         curl_setopt($this->ch, CURLOPT_RETURNTRANSFER, true);
     }
     public function setHeader()
@@ -114,15 +58,33 @@ class Request
     }
     public function result()
     {
-        //dump($this->requestResult);
         return $this->requestResult;
     }
 }
 class RequestFactory
 {
-    public static function create($streamer = null, $status = null, $url = null, $customFields = null)
+    public const API = ['online', 'getStreamers', 'status', 'sub'];
+    public $request;
+    public $parameters;
+
+    public function create(array $request)
     {
-        return new Request($streamer, $status, $url, $customFields);
+        $this->request = $request;
+        $this->setParameters();
+        $this->setUri();
+        return new Request($this->parameters);
+    }
+
+    public function setParameters(){
+        $this->parameters = reset($this->request);
+    }
+
+    public function setUri()
+    {
+        $this->parameters['uri'] = 'http://localhost:8000/api/streamers'.$this->parameters['uri'];
     }
 }
-$changeStatus = RequestFactory::create('xqcow', '0', null);
+$changeStatus = (new RequestFactory)->create(['online' => ['type' => 'GET', 'uri' => '/changeOnline', 'streamer' => 'xqcow', 'is_online' => '1']]);
+//$this->requestUrl =  'https://api.twitch.tv/helix/streams/?user_login=' . $this->requestStreamer;
+//$this->requestType = 'get';
+//$this->setFields(array('Authorization: Bearer gokyy7wxa9apriyjr2evaccv6h71qn', 'Client-ID: gosbl0lt05vzj18la6v11lexhvpwlb'));
