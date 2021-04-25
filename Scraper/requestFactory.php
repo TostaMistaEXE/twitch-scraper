@@ -19,8 +19,8 @@ class Request
     public function start()
     {
         $this->ch = curl_init();
-        $this->setHeader();
         $this->setRequestType();
+        $this->setHeader();
         return new RequestResult(curl_exec($this->ch));
     }
 
@@ -30,34 +30,29 @@ class Request
 
         if ($this->requestType == 'GET' || $this->requestType == 'get') {
             curl_setopt($this->ch, CURLOPT_HTTPGET, true);
-            $this->setHeader();
         } else {
             curl_setopt($this->ch, CURLOPT_POST, true);
-            $this->setHeader();
         }
 
         curl_setopt($this->ch, CURLOPT_RETURNTRANSFER, true);
     }
     public function setHeader()
     {
-
-        $fields_string = http_build_query($this->requestFields);
-
-        if ($this->requestType == 'get') {
+        if ($this->requestType == 'get' || $this->requestType == 'GET') {
             curl_setopt($this->ch, CURLOPT_HTTPHEADER, $this->requestFields);
         } else {
+            $fields_string = http_build_query($this->requestFields);
             curl_setopt($this->ch, CURLOPT_POSTFIELDS, $fields_string);
         }
     }
-
 }
 
-class RequestResult{
+class RequestResult
+{
     public $result;
     public function __construct($result)
     {
         $this->result = $result;
-        $this->decode();
     }
 
     public function decode()
@@ -73,7 +68,7 @@ class RequestResult{
 
 class RequestFactory
 {
-    public const API = ['changeOnline', 'getStreamers', 'status', 'sub'];
+    public const API = ['online', 'getStreamers', 'status', 'sub'];
     public $request;
     public $parameters;
 
@@ -81,26 +76,31 @@ class RequestFactory
     {
         $this->request = $request;
         $this->setParameters();
+        $this->getKey();
         $this->setUri();
         return new Request($this->parameters);
     }
 
     public function setParameters()
     {
-        //Gets the first value of the array
+        //Gets the first array
         $this->parameters = reset($this->request);
+    }
+    public function getKey()
+    {
+        //Gets the first value of the array
+        $this->request = key($this->request);
     }
 
     public function setUri()
     {
         //If the request is from the API add the base URL
-        //Otherwise, doesn't change the URI
-        if (in_array($this->parameters['uri'], self::API))
+        //Otherwise, is twitch API
+        if (in_array($this->request, self::API))
             $this->parameters['uri'] = 'http://localhost:8000/api/streamers/' . $this->parameters['uri'];
+        else if ($this->request == 'twitchOnline')
+            $this->parameters['uri'] = 'https://api.twitch.tv/helix/streams/?user_login=nmplol';
     }
 }
-$changeStatus = (new RequestFactory)->create(['online' => ['type' => 'POST', 'uri' => 'changeOnline', 'streamer' => 'xqcow', 'is_online' => '1']])->start();
-dump($changeStatus->decode()[0]['id']);
-//$this->requestUrl =  'https://api.twitch.tv/helix/streams/?user_login=' . $this->requestStreamer;
-//$this->requestType = 'get';
-//$this->setFields(array('Authorization: Bearer gokyy7wxa9apriyjr2evaccv6h71qn', 'Client-ID: gosbl0lt05vzj18la6v11lexhvpwlb'));
+$changeStatus = (new RequestFactory)->create(['twitchOnline' => ['type' => 'GET', 'Authorization: XXX', 'Client-ID: XXXX']])->start();
+dump($changeStatus->result());
