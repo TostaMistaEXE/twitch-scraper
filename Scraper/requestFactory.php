@@ -6,7 +6,6 @@ class Request
 {
     private $requestUrl;
     private $requestFields;
-    private $requestResult;
     private $requestType;
     private $ch;
 
@@ -58,7 +57,7 @@ class RequestResult{
     public function __construct($result)
     {
         $this->result = $result;
-        $this->result();
+        $this->decode();
     }
 
     public function decode()
@@ -101,7 +100,7 @@ class RequestFactory
     }
 }
 $changeStatus = (new RequestFactory)->create(['online' => ['type' => 'POST', 'uri' => 'changeOnline', 'streamer' => 'xqcow', 'is_online' => '1']])->start();
-dump($changeStatus);
+dump($changeStatus->decode()[0]['id']);
 //$this->requestUrl =  'https://api.twitch.tv/helix/streams/?user_login=' . $this->requestStreamer;
 //$this->requestType = 'get';
 //$this->setFields(array('Authorization: Bearer gokyy7wxa9apriyjr2evaccv6h71qn', 'Client-ID: gosbl0lt05vzj18la6v11lexhvpwlb'));
