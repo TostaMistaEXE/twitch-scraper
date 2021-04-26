@@ -9,7 +9,7 @@ use GhostZero\Tmi\Events\Twitch\AnonSubMysteryGiftEvent;
 use GhostZero\Tmi\Events\Twitch\ResubEvent;
 use GhostZero\Tmi\Events\Twitch\SubGiftEvent;
 use GhostZero\Tmi\Events\Twitch\SubMysteryGiftEvent;
-
+include('requestFactory.php');
 $streamers = CreateRequest::getAllStreamers();
 $streamers = $streamers->decode();
 class CreateRequest
