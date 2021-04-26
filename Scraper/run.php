@@ -34,7 +34,6 @@ class CreateRequest
     public static function createSub($fields)
     {
         $request = (new RequestFactory)->create(['sub' => array_merge(['type' => 'POST', 'uri' => 'sub'],$fields)])->start();
-        dump($request->decode());
         return $request->decode();
     }
 }
