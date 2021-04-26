@@ -11,30 +11,34 @@ use GhostZero\Tmi\Events\Twitch\SubGiftEvent;
 use GhostZero\Tmi\Events\Twitch\SubMysteryGiftEvent;
 
 include('requestFactory.php');
-$streamers = RequestFactory::create(null, null, 'getStreamers');
+$streamers = CreateRequest::getAllStreamers();
 $streamers = $streamers->decode();
-
-for ($i = 0; $i <= count($streamers) - 1; ++$i) {
-    $pid = pcntl_fork();
-    if ($pid == -1) {
-        die('could not fork');
-    } else if ($pid) {
-        // we are the parent
-        // pcntl_wait($status); //Protect against Zombie children
-    } else {
-        $GLOBALS['streamer'] = ($streamers[$i]['streamer']);
-        cli_set_process_title($GLOBALS['streamer'] . 'run.php');
-
-        $request = RequestFactory::create($GLOBALS['streamer'], '1', 'status');
-        $request = RequestFactory::create($GLOBALS['streamer'], null, 'checkTwitchOnline');
-        $data = $request->decode();
-        
-        if (empty($data['data'])) {
-            $request = RequestFactory::create($GLOBALS['streamer'], '0');
-            die();
-        }
-
-        $request = RequestFactory::create($GLOBALS['streamer'], '1', 'online');
+class CreateRequest
+{
+    public static function updateStatus($streamer, $status)
+    {
+        return (new RequestFactory)->create(['status' => ['type' => 'POST', 'uri'=> 'changeOnline','streamer' => $GLOBALS['streamer'], 'run' => $status]])->start();
+    }
+    public static function updateOnline($streamer, $status)
+    {
+        return (new RequestFactory)->create(['status' => ['type' => 'POST', 'uri'=> 'changeStatus','streamer' => $GLOBALS['streamer'], 'is_online' => $status]])->start();
+    }
+    public static function getAllStreamers()
+    {
+        return (new RequestFactory)->create(['getStreamers' => ['type' => 'GET', 'uri'=> 'getStreamers']])->start();
+    }
+    public static function checkIfTwitchOnline($streamer, $status)
+    {
+        $request = (new RequestFactory)->create(['twitchOnline' => ['type' => 'GET', 'streamer' => $GLOBALS['streamer'], 'Authorization: Bearer gokyy7wxa9apriyjr2evaccv6h71qn', 'Client-ID: gosbl0lt05vzj18la6v11lexhvpwlb']])->start();
+        return $result->decode();
+    }
+    public static function createSub($streamer, $fields)
+    {
+        return (new RequestFactory)->create(['sub' => ['type' => 'POST', 'sub' => $GLOBALS['streamer'], $fields]])->start();
+    }
+}
+class Client{
+    public function create(){
 
         $client = new Client(new ClientOptions([
             'options' => ['debug' => false],
@@ -52,8 +56,8 @@ for ($i = 0; $i <= count($streamers) - 1; ++$i) {
         function giftedRequest($event, $type): void
         {
 
-            $fields = ['recipient' => $event->recipient, 'plan' => $event->plan->plan, 'type' => $type, 'gifter' => $event->user, 'streamer' => $GLOBALS['streamer']];
-            RequestFactory::create($GLOBALS['streamer'], null,'sub',$fields);
+            $fields = ['recipient' => $event->recipient, 'plan' => $event->plan->plan, 'type' => $type, 'gifter' => $event->user];
+            CreateRequest::createSub($GLOBALS['streamer'],$fields);
         }
 
         /**
@@ -62,7 +66,7 @@ for ($i = 0; $i <= count($streamers) - 1; ++$i) {
         function subbedRequest($event, $type): void
         {
             $fields = ['recipient' => $event->user, 'plan' => $event->plan->plan, 'type' => $type, 'gifter' => NULL, 'streamer' => $GLOBALS['streamer']];
-            RequestFactory::create($GLOBALS['streamer'], null,'sub',$fields);
+            CreateRequest::createSub($GLOBALS['streamer'],$event);
         }
 
         $client->on(SubEvent::class, function (SubEvent $event) {
@@ -86,4 +90,29 @@ for ($i = 0; $i <= count($streamers) - 1; ++$i) {
         });
         $client->connect();
     }
+    
+}
+for ($i = 0; $i <= count($streamers) - 1; ++$i) {
+    $pid = pcntl_fork();
+    if ($pid == -1) {
+        die('could not fork');
+    } else if ($pid) {
+        // we are the parent
+        // pcntl_wait($status); //Protect against Zombie children
+    } else {
+        $GLOBALS['streamer'] = ($streamers[$i]['streamer']);
+        cli_set_process_title($GLOBALS['streamer'] . 'run.php');
+
+        if (!empty($checkIfOnline->decode()['data'])) {
+            CreateRequest::updateStatus($GLOBALS['streamer'], '1');
+            CreateRequest::updateStatus($GLOBALS['streamer'], '1');
+        } else {
+            CreateRequest::updateStatus($GLOBALS['streamer'], '0');
+            CreateRequest::updateOnline($GLOBALS['streamer'], '0');
+            die();
+        }
+
+
+        Client::create();
+
 }

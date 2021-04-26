@@ -77,9 +77,13 @@ class RequestFactory
     {
         //If the request is from the API add the base URL
         //Otherwise, is twitch API
-        if (in_array($this->request, self::API))
-            $this->requestFields['uri'] = 'http://localhost:8000/api/streamers/' . $this->requestFields['uri'];
-        else if ($this->request == 'twitchOnline')
+        if (in_array($this->request, self::API)) {
+            if ($this->request == 'sub')
+                $this->requestFields['uri'] = 'http://localhost:8000/api/create/' . $this->requestFields['uri'];
+            else {
+                $this->requestFields['uri'] = 'http://localhost:8000/api/streamers/' . $this->requestFields['uri'];
+            }
+        } else if ($this->request == 'twitchOnline')
             $this->requestFields['uri'] = 'https://api.twitch.tv/helix/streams/?user_login=' . $this->requestFields['streamer'];
 
         return $this->requestFields['uri'];
@@ -106,7 +110,7 @@ class RequestFactory
         }
     }
 }
-$changeStatus = (new RequestFactory)->create(['twitchOnline' => ['type' => 'GET', 'streamer' => 'nmplol', 'Authorization: Bearer XX', 'Client-ID: XX']])->start();
+$changeStatus = (new RequestFactory)->create(['twitchOnline' => ['type' => 'GET', 'streamer' => 'nmplol', 'Authorization: Bearer gokyy7wxa9apriyjr2evaccv6h71qn', 'Client-ID: gosbl0lt05vzj18la6v11lexhvpwlb']])->start();
 dump($changeStatus->result());
-$changeStatus = (new RequestFactory)->create(['online' => ['type' => 'POST', 'uri' => 'changeOnline', 'streamer' => 'xqcow', 'is_online' => '1']])->start();
+$changeStatus = (new RequestFactory)->create(['status' => ['type' => 'POST', 'uri' => 'changeStatus', 'streamer' => 'xqcow', 'run' => '1']])->start();
 dump($changeStatus->result());
