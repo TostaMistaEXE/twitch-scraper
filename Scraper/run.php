@@ -61,7 +61,7 @@ class TwitchIRC
 
             $fields = ['recipient' => $event->recipient, 'plan' => $event->plan->plan, 'gifttype' => $type, 'gifter' => $event->user];
             CreateRequest::createSub($fields);
-        }
+        }   
 
         /**
          * @param SubEvent $event

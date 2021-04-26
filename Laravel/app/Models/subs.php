@@ -10,5 +10,5 @@ class subs extends Model
     use HasFactory;
     public $timestamps = true;
     protected $table =  'subs1';
-    protected $fillable = ['type','gifter','recipient','streamer','plan'];
+    protected $fillable = ['gifttype','gifter','recipient','streamer','plan'];
 }
