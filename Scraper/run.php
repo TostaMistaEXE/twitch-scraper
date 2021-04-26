@@ -30,7 +30,7 @@ class CreateRequest
     public static function checkIfTwitchOnline($streamer, $status)
     {
         $request = (new RequestFactory)->create(['twitchOnline' => ['type' => 'GET', 'streamer' => $GLOBALS['streamer'], 'Authorization: Bearer gokyy7wxa9apriyjr2evaccv6h71qn', 'Client-ID: gosbl0lt05vzj18la6v11lexhvpwlb']])->start();
-        return $result->decode();
+        return $request->decode();
     }
     public static function createSub($streamer, $fields)
     {
