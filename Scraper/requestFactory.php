@@ -4,46 +4,17 @@ require_once(__DIR__ . '/vendor/autoload.php');
 
 class Request
 {
-    private $requestUrl;
-    private $requestFields;
-    private $requestType;
+
     private $ch;
 
-    public function __construct($request)
+    public function __construct($ch)
     {
-        $this->requestType = $request['type'];
-        $this->requestUrl = $request['uri'];
-        $this->requestFields = $request;
+        $this->ch = $ch;
     }
 
     public function start()
     {
-        $this->ch = curl_init();
-        $this->setRequestType();
-        $this->setHeader();
         return new RequestResult(curl_exec($this->ch));
-    }
-
-    public function setRequestType()
-    {
-        curl_setopt($this->ch, CURLOPT_URL, $this->requestUrl);
-
-        if ($this->requestType == 'GET' || $this->requestType == 'get') {
-            curl_setopt($this->ch, CURLOPT_HTTPGET, true);
-        } else {
-            curl_setopt($this->ch, CURLOPT_POST, true);
-        }
-
-        curl_setopt($this->ch, CURLOPT_RETURNTRANSFER, true);
-    }
-    public function setHeader()
-    {
-        if ($this->requestType == 'get' || $this->requestType == 'GET') {
-            curl_setopt($this->ch, CURLOPT_HTTPHEADER, $this->requestFields);
-        } else {
-            $fields_string = http_build_query($this->requestFields);
-            curl_setopt($this->ch, CURLOPT_POSTFIELDS, $fields_string);
-        }
     }
 }
 
@@ -70,22 +41,32 @@ class RequestFactory
 {
     public const API = ['online', 'getStreamers', 'status', 'sub'];
     public $request;
-    public $parameters;
+    private $requestUrl;
+    private $requestFields;
+    private $requestType;
+    private $ch;
 
     public function create(array $request)
     {
         $this->request = $request;
+        $this->ch = curl_init(); //Initiates curl request
         $this->setParameters();
-        $this->getKey();
-        $this->setUri();
-        return new Request($this->parameters);
+        $this->setRequestType();
+        $this->setHeader();
+        return new Request($this->ch);
     }
 
     public function setParameters()
     {
         //Gets the first array
-        $this->parameters = reset($this->request);
+        $this->requestFields = reset($this->request);
+
+        $this->getKey();
+
+        $this->requestUrl = $this->setUri();
+        $this->requestType = $this->requestFields['type'];
     }
+
     public function getKey()
     {
         //Gets the first value of the array
@@ -97,10 +78,35 @@ class RequestFactory
         //If the request is from the API add the base URL
         //Otherwise, is twitch API
         if (in_array($this->request, self::API))
-            $this->parameters['uri'] = 'http://localhost:8000/api/streamers/' . $this->parameters['uri'];
+            $this->requestFields['uri'] = 'http://localhost:8000/api/streamers/' . $this->requestFields['uri'];
         else if ($this->request == 'twitchOnline')
-            $this->parameters['uri'] = 'https://api.twitch.tv/helix/streams/?user_login=nmplol';
+            $this->requestFields['uri'] = 'https://api.twitch.tv/helix/streams/?user_login=' . $this->requestFields['streamer'];
+
+        return $this->requestFields['uri'];
+    }
+    public function setRequestType()
+    {
+        curl_setopt($this->ch, CURLOPT_URL, $this->requestUrl);
+
+        if ($this->requestType == 'GET' || $this->requestType == 'get') {
+            curl_setopt($this->ch, CURLOPT_HTTPGET, true);
+        } else {
+            curl_setopt($this->ch, CURLOPT_POST, true);
+        }
+
+        curl_setopt($this->ch, CURLOPT_RETURNTRANSFER, true);
+    }
+    public function setHeader()
+    {
+        if ($this->requestType == 'get' || $this->requestType == 'GET') {
+            curl_setopt($this->ch, CURLOPT_HTTPHEADER, $this->requestFields);
+        } else {
+            $fields_string = http_build_query($this->requestFields);
+            curl_setopt($this->ch, CURLOPT_POSTFIELDS, $fields_string);
+        }
     }
 }
-$changeStatus = (new RequestFactory)->create(['twitchOnline' => ['type' => 'GET', 'Authorization: XXX', 'Client-ID: XXXX']])->start();
+$changeStatus = (new RequestFactory)->create(['twitchOnline' => ['type' => 'GET', 'streamer' => 'nmplol', 'Authorization: Bearer XX', 'Client-ID: XX']])->start();
+dump($changeStatus->result());
+$changeStatus = (new RequestFactory)->create(['online' => ['type' => 'POST', 'uri' => 'changeOnline', 'streamer' => 'xqcow', 'is_online' => '1']])->start();
 dump($changeStatus->result());
