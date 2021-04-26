@@ -25,7 +25,7 @@ class CreateRequest
     }
     public static function getAllStreamers()
     {
-        return (new RequestFactory)->create(['getStreamers' => ['type' => 'GET', 'uri' => 'getStreamers']])->start();
+        return (new RequestFactory)->create(['getStreamers' => ['type' => 'GET', 'uri' => 'getAll']])->start();
     }
     public static function checkIfTwitchOnline($streamer, $status)
     {
