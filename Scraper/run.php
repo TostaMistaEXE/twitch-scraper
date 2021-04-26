@@ -17,15 +17,15 @@ class CreateRequest
 {
     public static function updateStatus($streamer, $status)
     {
-        return (new RequestFactory)->create(['status' => ['type' => 'POST', 'uri'=> 'changeOnline','streamer' => $GLOBALS['streamer'], 'run' => $status]])->start();
+        return (new RequestFactory)->create(['status' => ['type' => 'POST', 'uri' => 'changeOnline', 'streamer' => $GLOBALS['streamer'], 'run' => $status]])->start();
     }
     public static function updateOnline($streamer, $status)
     {
-        return (new RequestFactory)->create(['status' => ['type' => 'POST', 'uri'=> 'changeStatus','streamer' => $GLOBALS['streamer'], 'is_online' => $status]])->start();
+        return (new RequestFactory)->create(['status' => ['type' => 'POST', 'uri' => 'changeStatus', 'streamer' => $GLOBALS['streamer'], 'is_online' => $status]])->start();
     }
     public static function getAllStreamers()
     {
-        return (new RequestFactory)->create(['getStreamers' => ['type' => 'GET', 'uri'=> 'getStreamers']])->start();
+        return (new RequestFactory)->create(['getStreamers' => ['type' => 'GET', 'uri' => 'getStreamers']])->start();
     }
     public static function checkIfTwitchOnline($streamer, $status)
     {
@@ -37,8 +37,10 @@ class CreateRequest
         return (new RequestFactory)->create(['sub' => ['type' => 'POST', 'sub' => $GLOBALS['streamer'], $fields]])->start();
     }
 }
-class Client{
-    public function create(){
+class TwitchIRC
+{
+    public static function create()
+    {
 
         $client = new Client(new ClientOptions([
             'options' => ['debug' => false],
@@ -57,7 +59,7 @@ class Client{
         {
 
             $fields = ['recipient' => $event->recipient, 'plan' => $event->plan->plan, 'type' => $type, 'gifter' => $event->user];
-            CreateRequest::createSub($GLOBALS['streamer'],$fields);
+            CreateRequest::createSub($GLOBALS['streamer'], $fields);
         }
 
         /**
@@ -66,7 +68,7 @@ class Client{
         function subbedRequest($event, $type): void
         {
             $fields = ['recipient' => $event->user, 'plan' => $event->plan->plan, 'type' => $type, 'gifter' => NULL, 'streamer' => $GLOBALS['streamer']];
-            CreateRequest::createSub($GLOBALS['streamer'],$event);
+            CreateRequest::createSub($GLOBALS['streamer'], $event);
         }
 
         $client->on(SubEvent::class, function (SubEvent $event) {
@@ -90,7 +92,6 @@ class Client{
         });
         $client->connect();
     }
-    
 }
 for ($i = 0; $i <= count($streamers) - 1; ++$i) {
     $pid = pcntl_fork();
@@ -113,6 +114,6 @@ for ($i = 0; $i <= count($streamers) - 1; ++$i) {
         }
 
 
-        Client::create();
-
+        TwitchIRC::create();
+    }
 }
