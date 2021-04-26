@@ -16,7 +16,7 @@ class CreateRequest
 {
     public static function updateStatus($streamer, $status)
     {
-        return (new RequestFactory)->create(['status' => ['type' => 'POST', 'uri' => 'changeStatus', 'streamer' => $streamer, 'is_online' => $status]])->start();
+        return (new RequestFactory)->create(['status' => ['type' => 'POST', 'uri' => 'changeStatus', 'streamer' => $streamer, 'run' => $status]])->start();
     }
     public static function updateOnline($streamer, $status)
     {
