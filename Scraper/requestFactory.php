@@ -111,7 +111,7 @@ class RequestFactory
     }
 }
 
-$changeStatus = (new RequestFactory)->create(['getStreamers' => ['type' => 'GET', 'uri' => 'getAll']])->start();
-dump($changeStatus->result());
+$changeStatus = (new RequestFactory)->create(['twitchOnline' => ['type' => 'GET', 'streamer' => 'xqcow', 'Authorization: Bearer gokyy7wxa9apriyjr2evaccv6h71qn', 'Client-ID: gosbl0lt05vzj18la6v11lexhvpwlb']])->start();
+dump(empty($changeStatus->decode()['data']));
 $changeStatus = (new RequestFactory)->create(['status' => ['type' => 'POST', 'uri' => 'changeStatus', 'streamer' => 'xqcow', 'run' => '1']])->start();
 dump($changeStatus->result());

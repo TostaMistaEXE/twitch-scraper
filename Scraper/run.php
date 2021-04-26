@@ -27,7 +27,7 @@ class CreateRequest
     {
         return (new RequestFactory)->create(['getStreamers' => ['type' => 'GET', 'uri' => 'getAll']])->start();
     }
-    public static function checkIfTwitchOnline($streamer, $status)
+    public static function checkIfTwitchOnline($streamer)
     {
         $request = (new RequestFactory)->create(['twitchOnline' => ['type' => 'GET', 'streamer' => $GLOBALS['streamer'], 'Authorization: Bearer gokyy7wxa9apriyjr2evaccv6h71qn', 'Client-ID: gosbl0lt05vzj18la6v11lexhvpwlb']])->start();
         return $request->decode();
@@ -104,7 +104,7 @@ for ($i = 0; $i <= count($streamers) - 1; ++$i) {
         $GLOBALS['streamer'] = ($streamers[$i]['streamer']);
         cli_set_process_title($GLOBALS['streamer'] . 'run.php');
 
-        if (!empty($checkIfOnline->decode()['data'])) {
+        if (!empty(CreateRequest::checkIfTwitchOnline($GLOBALS['streamer'])['data'])) {
             CreateRequest::updateStatus($GLOBALS['streamer'], '1');
             CreateRequest::updateStatus($GLOBALS['streamer'], '1');
         } else {
