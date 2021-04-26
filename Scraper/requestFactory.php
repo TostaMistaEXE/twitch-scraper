@@ -48,7 +48,6 @@ class RequestFactory
 
     public function create(array $request)
     {
-        dump($request);
         $this->request = $request;
         $this->ch = curl_init(); //Initiates curl request
         $this->setParameters();

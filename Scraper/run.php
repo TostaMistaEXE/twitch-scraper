@@ -69,6 +69,7 @@ class TwitchIRC
         function subbedRequest($event, $type): void
         {
             $fields = ['recipient' => $event->user, 'plan' => $event->plan->plan, 'gifttype' => $type, 'gifter' => NULL, 'streamer' => $GLOBALS['streamer']];
+            dump($fields);
             CreateRequest::createSub($fields);
         }
 
