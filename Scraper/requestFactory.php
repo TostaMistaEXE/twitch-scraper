@@ -111,3 +111,5 @@ class RequestFactory
     }
 }
 
+$request = (new RequestFactory)->create(['status' => ['type' => 'POST', 'uri' => 'changeStatus', 'streamer' => $streamer, 'is_online' => $status]])->start();
+dump($request->result());
