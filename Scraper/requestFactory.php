@@ -110,3 +110,6 @@ class RequestFactory
         }
     }
 }
+
+$changeStatus = (new RequestFactory)->create(['sub' => ['type' => 'POST', 'sub' => $GLOBALS['streamer'], $fields]])->start();
+dump($changeStatus);

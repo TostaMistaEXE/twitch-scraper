@@ -33,7 +33,7 @@ class CreateRequest
     }
     public static function createSub($streamer, $fields)
     {
-        return (new RequestFactory)->create(['sub' => ['type' => 'POST', 'sub' => $GLOBALS['streamer'], $fields]])->start();
+        return (new RequestFactory)->create(['sub' => ['type' => 'POST', 'uri' => 'sub', $fields]])->start();
     }
 }
 class TwitchIRC
