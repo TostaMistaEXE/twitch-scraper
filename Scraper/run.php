@@ -16,11 +16,11 @@ class CreateRequest
 {
     public static function updateStatus($streamer, $status)
     {
-        return (new RequestFactory)->create(['status' => ['type' => 'POST', 'uri' => 'changeOnline', 'streamer' => $GLOBALS['streamer'], 'run' => $status]])->start();
+        return (new RequestFactory)->create(['status' => ['type' => 'POST', 'uri' => 'changeStatus', 'streamer' => $streamer, 'is_online' => $status]])->start();
     }
     public static function updateOnline($streamer, $status)
     {
-        return (new RequestFactory)->create(['status' => ['type' => 'POST', 'uri' => 'changeStatus', 'streamer' => $GLOBALS['streamer'], 'is_online' => $status]])->start();
+        return (new RequestFactory)->create(['status' => ['type' => 'POST', 'uri' => 'changeOnline', 'streamer' => $streamer, 'is_online' => $status]])->start();
     }
     public static function getAllStreamers()
     {
@@ -28,7 +28,7 @@ class CreateRequest
     }
     public static function checkIfTwitchOnline($streamer)
     {
-        $request = (new RequestFactory)->create(['twitchOnline' => ['type' => 'GET', 'streamer' => $GLOBALS['streamer'], 'Authorization: Bearer gokyy7wxa9apriyjr2evaccv6h71qn', 'Client-ID: gosbl0lt05vzj18la6v11lexhvpwlb']])->start();
+        $request = (new RequestFactory)->create(['twitchOnline' => ['type' => 'GET', 'streamer' => $streamer, 'Authorization: Bearer gokyy7wxa9apriyjr2evaccv6h71qn', 'Client-ID: gosbl0lt05vzj18la6v11lexhvpwlb']])->start();
         return $request->decode();
     }
     public static function createSub($streamer, $fields)
@@ -105,7 +105,7 @@ for ($i = 0; $i <= count($streamers) - 1; ++$i) {
 
         if (!empty(CreateRequest::checkIfTwitchOnline($GLOBALS['streamer'])['data'])) {
             CreateRequest::updateStatus($GLOBALS['streamer'], '1');
-            CreateRequest::updateStatus($GLOBALS['streamer'], '1');
+            CreateRequest::updateOnline($GLOBALS['streamer'], '1');
         } else {
             CreateRequest::updateStatus($GLOBALS['streamer'], '0');
             CreateRequest::updateOnline($GLOBALS['streamer'], '0');
