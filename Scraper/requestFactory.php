@@ -48,6 +48,7 @@ class RequestFactory
 
     public function create(array $request)
     {
+        dump($request);
         $this->request = $request;
         $this->ch = curl_init(); //Initiates curl request
         $this->setParameters();
@@ -111,5 +112,5 @@ class RequestFactory
     }
 }
 
-//$request = (new RequestFactory)->create(['status' => ['type' => 'POST', 'uri' => 'changeStatus', 'streamer' => 'xqcow', 'run' => '1']])->start();
-//dump($request->result());
+//$request = (new RequestFactory)->create($array)->start();
+//return dump($request->decode());

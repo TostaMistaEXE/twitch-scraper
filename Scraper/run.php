@@ -11,8 +11,7 @@ use GhostZero\Tmi\Events\Twitch\SubGiftEvent;
 use GhostZero\Tmi\Events\Twitch\SubMysteryGiftEvent;
 
 include('requestFactory.php');
-$streamers = CreateRequest::getAllStreamers();
-$streamers = $streamers->decode();
+
 class CreateRequest
 {
     public static function updateStatus($streamer, $status)
@@ -34,7 +33,7 @@ class CreateRequest
     }
     public static function createSub($fields)
     {
-        $request = (new RequestFactory)->create(['sub' => ['type' => 'POST', 'uri' => 'sub', $fields]])->start();
+        $request = (new RequestFactory)->create(['sub' => array_merge(['type' => 'POST', 'uri' => 'sub'],$fields)])->start();
         return dump($request->decode());
     }
 }
@@ -59,7 +58,7 @@ class TwitchIRC
         function giftedRequest($event, $type): void
         {
 
-            $fields = ['recipient' => $event->recipient, 'plan' => $event->plan->plan, 'type' => $type, 'gifter' => $event->user];
+            $fields = ['recipient' => $event->recipient, 'plan' => $event->plan->plan, 'gifttype' => $type, 'gifter' => $event->user];
             CreateRequest::createSub($fields);
         }
 
@@ -68,7 +67,7 @@ class TwitchIRC
          */
         function subbedRequest($event, $type): void
         {
-            $fields = ['recipient' => $event->user, 'plan' => $event->plan->plan, 'type' => $type, 'gifter' => NULL, 'streamer' => $GLOBALS['streamer']];
+            $fields = ['recipient' => $event->user, 'plan' => $event->plan->plan, 'gifttype' => $type, 'gifter' => NULL, 'streamer' => $GLOBALS['streamer']];
             CreateRequest::createSub($fields);
         }
 
@@ -94,27 +93,36 @@ class TwitchIRC
         $client->connect();
     }
 }
-for ($i = 0; $i <= count($streamers) - 1; ++$i) {
-    $pid = pcntl_fork();
-    if ($pid == -1) {
-        die('could not fork');
-    } else if ($pid) {
-        // we are the parent
-        // pcntl_wait($status); //Protect against Zombie children
-    } else {
-        $GLOBALS['streamer'] = ($streamers[$i]['streamer']);
-        cli_set_process_title($GLOBALS['streamer'] . 'run.php');
+class Main
+{
+    public static function start()
+    {
+        $streamers = CreateRequest::getAllStreamers();
+        $streamers = $streamers->decode();
+        for ($i = 0; $i <= count($streamers) - 1; ++$i) {
+            $pid = pcntl_fork();
+            if ($pid == -1) {
+                die('could not fork');
+            } else if ($pid) {
+                // we are the parent
+                // pcntl_wait($status); //Protect against Zombie children
+            } else {
+                $GLOBALS['streamer'] = ($streamers[$i]['streamer']);
+                cli_set_process_title($GLOBALS['streamer'] . 'run.php');
 
-        if (!empty(CreateRequest::checkIfTwitchOnline($GLOBALS['streamer'])['data'])) {
-            CreateRequest::updateStatus($GLOBALS['streamer'], '1');
-            CreateRequest::updateOnline($GLOBALS['streamer'], '1');
-        } else {
-            CreateRequest::updateStatus($GLOBALS['streamer'], '0');
-            CreateRequest::updateOnline($GLOBALS['streamer'], '0');
-            die();
+                if (!empty(CreateRequest::checkIfTwitchOnline($GLOBALS['streamer'])['data'])) {
+                    CreateRequest::updateStatus($GLOBALS['streamer'], '1');
+                    CreateRequest::updateOnline($GLOBALS['streamer'], '1');
+                } else {
+                    CreateRequest::updateStatus($GLOBALS['streamer'], '0');
+                    CreateRequest::updateOnline($GLOBALS['streamer'], '0');
+                    die();
+                }
+
+
+                TwitchIRC::create();
+            }
         }
-
-
-        TwitchIRC::create();
     }
 }
+Main::start();

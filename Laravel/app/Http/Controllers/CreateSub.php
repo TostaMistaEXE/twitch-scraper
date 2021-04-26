@@ -10,7 +10,7 @@ class CreateSub extends Controller
     public function createsub(Request $request)
     {
         $request->validate([
-            'type' => 'required',
+            'gifttype' => 'required',
             'streamer' => 'required',
             'plan' => 'required',
         ]);
