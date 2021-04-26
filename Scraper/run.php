@@ -9,6 +9,7 @@ use GhostZero\Tmi\Events\Twitch\AnonSubMysteryGiftEvent;
 use GhostZero\Tmi\Events\Twitch\ResubEvent;
 use GhostZero\Tmi\Events\Twitch\SubGiftEvent;
 use GhostZero\Tmi\Events\Twitch\SubMysteryGiftEvent;
+
 include('requestFactory.php');
 $streamers = CreateRequest::getAllStreamers();
 $streamers = $streamers->decode();
@@ -31,9 +32,10 @@ class CreateRequest
         $request = (new RequestFactory)->create(['twitchOnline' => ['type' => 'GET', 'streamer' => $streamer, 'Authorization: Bearer gokyy7wxa9apriyjr2evaccv6h71qn', 'Client-ID: gosbl0lt05vzj18la6v11lexhvpwlb']])->start();
         return $request->decode();
     }
-    public static function createSub($streamer, $fields)
+    public static function createSub($fields)
     {
-        return (new RequestFactory)->create(['sub' => ['type' => 'POST', 'uri' => 'sub', $fields]])->start();
+        $request = (new RequestFactory)->create(['sub' => ['type' => 'POST', 'uri' => 'sub', $fields]])->start();
+        return dump($request->decode());
     }
 }
 class TwitchIRC
@@ -58,7 +60,7 @@ class TwitchIRC
         {
 
             $fields = ['recipient' => $event->recipient, 'plan' => $event->plan->plan, 'type' => $type, 'gifter' => $event->user];
-            CreateRequest::createSub($GLOBALS['streamer'], $fields);
+            CreateRequest::createSub($fields);
         }
 
         /**
@@ -67,7 +69,7 @@ class TwitchIRC
         function subbedRequest($event, $type): void
         {
             $fields = ['recipient' => $event->user, 'plan' => $event->plan->plan, 'type' => $type, 'gifter' => NULL, 'streamer' => $GLOBALS['streamer']];
-            CreateRequest::createSub($GLOBALS['streamer'], $event);
+            CreateRequest::createSub($fields);
         }
 
         $client->on(SubEvent::class, function (SubEvent $event) {
